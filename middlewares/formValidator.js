@@ -1,6 +1,6 @@
 import { body, validationResult, matchedData } from "express-validator";
 
-const validateForm = [
+export const validateForm = [
   body("firstname")
     .trim()
     .notEmpty()
@@ -34,7 +34,7 @@ const validateForm = [
     .withMessage("Please confirm your password")
     .custom((value, { req }) => {
       if (value !== req.body.password) {
-        throw new Error("Password do not match");
+        throw new Error("Passwords do not match");
       }
       return true;
     }),
