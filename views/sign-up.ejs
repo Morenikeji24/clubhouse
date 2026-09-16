@@ -8,6 +8,13 @@
   <body>
     <h1>Sign Up</h1>
     <hr />
+    <% if (errors && errors.length > 0) { %>
+  <ul>
+    <% errors.forEach(error => { %>
+      <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
 
     <form action="/sign-up" method="post">
       <label for="firstname">Firsname</label>
