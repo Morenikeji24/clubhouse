@@ -8,6 +8,21 @@ const db = {
       [first_name, last_name, username, password],
     );
   },
+
+  async getUser(username) {
+    const { rows } = await pool.query(
+      `SELECT * FROM users WHERE user_name = $1`,
+      [username],
+    );
+    return rows[0];
+  },
+
+  async getUserId(id) {
+    const { rows } = await pool.query(`SELECT * FROM users WHERE id = $1`, [
+      id,
+    ]);
+    return rows[0];
+  },
 };
 
 export default db;
