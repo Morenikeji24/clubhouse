@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Clubhouse</title>
 </head>
 
@@ -11,21 +12,59 @@
 
   <% if (currentUser) { %>
 
-    <p>Welcome, <%= currentUser.first_name %>!</p>
-    <a href="/logout">Log out</a>
+    <h1>Welcome, <%= currentUser.first_name %>!</h1>
 
-    <h2>Messages</h2>
+    <a href="/logout">Log out</a>
+    <a href="/messages/new">Create a new message</a>
+
+    <% if (currentUser.admin) { %>
+
+      <p>You are an admin.</p>
+
+    <% } else if (currentUser.membership_status) { %>
+
+      <a href="/become-admin">Become an admin</a>
+
+    <% } else { %>
+
+      <a href="/become-member">Become a member</a>
+
+    <% } %>
+
+  <% } else { %>
+
+    <a href="/login">Log in</a>
+    <a href="/sign-up">Sign up</a>
+
+  <% } %>
+
+
+  <h2>Messages</h2>
+
+  <% if (messages.length === 0) { %>
+
+    <p>No messages yet.</p>
+
+  <% } else { %>
 
     <% messages.forEach(message => { %>
 
       <article>
+
         <h3><%= message.title %></h3>
 
         <p><%= message.text %></p>
 
-        <p>Posted on: <%= message.time_stamp %></p>
+        <% if (currentUser) { %>
 
-        <% if (currentUser.membership_status || currentUser.admin) { %>
+          <p>
+            Posted on: <%= message.time_stamp %>
+          </p>
+
+        <% } %>
+
+
+        <% if (currentUser && (currentUser.membership_status || currentUser.admin)) { %>
 
           <p>
             Author:
@@ -35,7 +74,8 @@
 
         <% } %>
 
-        <% if (currentUser.admin) { %>
+
+        <% if (currentUser && currentUser.admin) { %>
 
           <form
             action="/messages/<%= message.id %>/delete"
@@ -48,16 +88,9 @@
 
       </article>
 
-      <hr />
+      <hr>
 
     <% }) %>
-
-  <% } else { %>
-
-    <a href="/login">Log in</a>
-    <a href="/sign-up">Sign up</a>
-
-    <p>You must be logged in to view messages.</p>
 
   <% } %>
 
