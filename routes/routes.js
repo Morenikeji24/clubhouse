@@ -1,6 +1,6 @@
 import { Router } from "express";
 import controller from "../controllers/controller.js";
-import { signUpValidateForm } from "../middlewares/formValidator.js";
+import { signUpValidateForm } from "../middlewares/signUpFormValidator.js";
 
 export const router = Router();
 
