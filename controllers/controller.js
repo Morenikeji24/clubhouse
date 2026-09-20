@@ -5,7 +5,8 @@ import passport from "passport";
 
 const controller = {
   async getHomePage(req, res) {
-    res.render("index", { messages: [] });
+    const messages = await db.getAllMessages();
+    res.render("index", { messages: messages });
   },
 
   async getSignUp(req, res) {
@@ -56,6 +57,24 @@ const controller = {
         res.redirect("/");
       });
     })(req, res, next);
+  },
+
+  async getMessageForm(req, res) {
+    res.render("messageForm", { errors: [] });
+  },
+
+  async postMessageForm(req, res) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).render("messageForm", { errors: errors.array() });
+    }
+
+    const { title, text } = req.body;
+    const user_id = req.user.id;
+
+    await db.addMessage(title, text, user_id);
+
+    res.redirect("/");
   },
 };
 
