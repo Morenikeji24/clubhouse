@@ -2,6 +2,7 @@ import { validationResult } from "express-validator";
 import db from "../db/queries.js";
 import bcrypt from "bcryptjs";
 import passport from "passport";
+import "dotenv/config";
 
 const controller = {
   async getHomePage(req, res) {
@@ -84,6 +85,82 @@ const controller = {
       }
       res.redirect("/");
     });
+  },
+
+  async getMemberForm(req, res) {
+    res.render("members", { type: "member", errors: [] });
+  },
+
+  async postMemberForm(req, res) {
+    const { code } = req.body;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res
+        .status(400)
+        .render("members", { type: "member", errors: errors.array() });
+    }
+
+    if (req.user.membership_status) {
+      return res.status(400).render("members", {
+        type: "member",
+        errors: [{ msg: "You are already a member." }],
+      });
+    }
+
+    if (code !== process.env.PASSCODE) {
+      return res.status(400).render("members", {
+        type: "member",
+        errors: [{ msg: "Incorrect code." }],
+      });
+    }
+
+    const id = req.user.id;
+
+    await db.addMember(id);
+
+    res.redirect("/");
+  },
+
+  async getAdminForm(req, res) {
+    res.render("members", { type: "admin", errors: [] });
+  },
+
+  async postAdminForm(req, res) {
+    const { code } = req.body;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res
+        .status(400)
+        .render("members", { type: "admin", errors: errors.array() });
+    }
+
+    if (req.user.admin) {
+      return res.status(400).render("members", {
+        type: "admin",
+        errors: [{ msg: "You are already an Admin." }],
+      });
+    }
+
+    if (code !== process.env.ADMIN_PASSCODE) {
+      return res.status(400).render("members", {
+        type: "admin",
+        errors: [{ msg: "Incorrect code." }],
+      });
+    }
+
+    const id = req.user.id;
+
+    await db.addAdmin(id);
+
+    res.redirect("/");
+  },
+
+  async deleteMessage(req, res) {
+    const { id } = req.params;
+
+    await db.deleteMessage(id);
+
+    res.redirect("/");
   },
 };
 
