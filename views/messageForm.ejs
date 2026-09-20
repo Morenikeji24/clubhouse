@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Create a Message</h1>
+    <hr />
+
+    <% if (errors && errors.length > 0) { %>
+  <ul>
+    <% errors.forEach(error => { %>
+      <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
+    <form action="/messages/new" method="post">
+      <label for="title">Title</label>
+      <input
+        type="text"
+        name="title"
+        id="title"
+        required
+        placeholder="Title of your message"
+      />
+
+      <label for="text">Text</label>
+      <input
+        type="text"
+        name="text"
+        id="text"
+        required
+        placeholder="Leave a message here."
+      />
+
+      <button type="submit">Create Message</button>
+    </form>
+  </body>
+</html>
