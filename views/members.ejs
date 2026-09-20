@@ -1,2 +1,69 @@
-// form to become a member // return an error message if the wrong code is
-entered // if a user is already a member, return an error // same for admins
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Become a Member</title>
+</head>
+
+<body>
+
+  <% if (type === "member") { %>
+
+    <h1>Become a Member</h1>
+
+    <p>Enter the membership code to become a member.</p>
+
+    <form action="/become-member" method="POST">
+
+      <label for="code">Membership Code</label>
+      <input
+        type="password"
+        name="code"
+        id="code"
+        required
+      >
+
+      <button type="submit">Become a Member</button>
+
+    </form>
+
+  <% } else if (type === "admin") { %>
+
+    <h1>Become an Admin</h1>
+
+    <p>Enter the admin code to become an admin.</p>
+
+    <form action="/become-admin" method="POST">
+
+      <label for="code">Admin Code</label>
+      <input
+        type="password"
+        name="code"
+        id="code"
+        required
+      >
+
+      <button type="submit">Become an Admin</button>
+
+    </form>
+
+  <% } %>
+
+
+  <% if (errors && errors.length > 0) { %>
+  <ul>
+    <% errors.forEach(error => { %>
+      <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
+
+  <a href="/">Back to home</a>
+
+</body>
+
+</html>
