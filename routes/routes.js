@@ -13,3 +13,4 @@ router.get("/login", controller.getLogin);
 router.post("/login", loginFormValidator, controller.postLogin);
 router.get("/messages/new", requireLogin, controller.getMessageForm);
 router.post("/messages/new", requireLogin, controller.postMessageForm);
+router.get("/logout", requireLogin, controller.logout);
