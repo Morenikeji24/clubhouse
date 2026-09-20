@@ -46,6 +46,32 @@ const db = {
 
     return rows;
   },
+
+  async addMember(userId) {
+    await pool.query(
+      `UPDATE users
+        SET membership_status = true
+        WHERE id = $1`,
+      [userId],
+    );
+  },
+
+  async addAdmin(userId) {
+    await pool.query(
+      `UPDATE users
+        SET admin = true
+        WHERE id = $1`,
+      [userId],
+    );
+  },
+
+  async deleteMessage(msgId) {
+    await pool.query(
+      `DELETE FROM messages
+        WHERE id = $1`,
+      [msgId],
+    );
+  },
 };
 
 export default db;
